@@ -24,15 +24,12 @@ namespace LexiconTest1.Kattis
             int updatedNumber = 2;
 
             while (updatedNumber * updatedNumber <= restNumber) {
-                for (int i = updatedNumber; i < restNumber; i++)
+                if (restNumber % updatedNumber == 0)
                 {
-                    while (restNumber % updatedNumber == 0)
-                    {
-                        restNumber = restNumber / updatedNumber;
-                        pointsPlayer2++;
-                    }
-                    updatedNumber++;
+                    restNumber /= updatedNumber;
+                    pointsPlayer2++;
                 }
+                else { updatedNumber++; }
             }
 
             if (restNumber > 1)
