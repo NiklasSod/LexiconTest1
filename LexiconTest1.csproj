@@ -5,7 +5,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <StartupObject>LexiconTest1.Kattis.TheBusCard</StartupObject>
+    <StartupObject>LexiconTest1.Kattis.Frogger</StartupObject>
   </PropertyGroup>
 
 </Project>
