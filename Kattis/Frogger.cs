@@ -16,8 +16,10 @@ namespace LexiconTest1.Kattis
             GameData? data = ParseInput();
             if (data == null) return;
 
-            // store the outcome for Kattis to read
-            Outcome(data);
+            FrogResult result = Outcome(data);
+
+            Console.WriteLine(result.StatusOfGame);
+            Console.WriteLine(result.NumberOfJumps);
         }
 
         static GameData? ParseInput()
@@ -47,7 +49,7 @@ namespace LexiconTest1.Kattis
 
             if (boardParts.Length != amountOfSquares) return null;
 
-            // amountOfSquares not needed anymore, boardParts has extra information now (position and value)
+            // amountOfSquares not needed anymore, boardParts has "extra" information now (length and value)
             return new GameData(startingSquare, magicNumber, boardParts);
         }
 
@@ -59,11 +61,36 @@ namespace LexiconTest1.Kattis
 
         static FrogResult Outcome(GameData data)
         {
-            int start = data.StartingSquare;
+            int start = data.StartingSquare - 1;
             int magic = data.MagicNumber;
             int[] board = data.Board;
 
-            return new FrogResult { StatusOfGame = "magic", NumberOfJumps = 5 }; // example return
+            List<int> cycleNumber = new List<int>();
+            int boardPosition = start;
+            int jumps = 0;
+
+            while (boardPosition < board.Length && boardPosition >= 0)
+            {
+                if (board[boardPosition] == magic)
+                {
+                    return new FrogResult { StatusOfGame = "magic", NumberOfJumps = jumps };
+                }
+
+                if (cycleNumber.Contains(boardPosition))
+                {
+                    return new FrogResult { StatusOfGame = "cycle", NumberOfJumps = jumps };
+                }
+
+                cycleNumber.Add(boardPosition);
+
+                int moveValue = board[boardPosition];
+                boardPosition += moveValue;
+                jumps++;
+            }
+
+            string status = (boardPosition < 0) ? "left" : "right";
+
+            return new FrogResult { StatusOfGame = status, NumberOfJumps = jumps };
         }
     }
 }
