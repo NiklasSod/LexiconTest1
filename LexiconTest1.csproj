@@ -5,7 +5,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <StartupObject>LexiconTest1.Kattis.LvAble</StartupObject>
+    <StartupObject>LexiconTest1.Kattis._4thought</StartupObject>
   </PropertyGroup>
 
 </Project>

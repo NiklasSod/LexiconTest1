@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace LexiconTest1.Kattis
@@ -8,23 +10,56 @@ namespace LexiconTest1.Kattis
     {
         static void Main(string[] args)
         {
-            int[] solutions = PreComputeAll();
+            var solutions = PreComputeAll(); 
+            // solutions[0] = CalculationResult { Value = 16, Expression = 4 + 4 + 4 + 4 }
             string testLength = Console.ReadLine();
-            if (int.TryParse(testLength, out int testCases)) {
+
+            if (int.TryParse(testLength, out int testCases))
+            {
                 for (int i = 0; i < testCases; i++)
                 {
                     string testCase = Console.ReadLine();
-                    int number = int.Parse(testCase);
-                    // check solutions array and answer in Console.WriteLine
+                    if (int.TryParse(testCase, out int number))
+                    {
+                        var match = solutions.FirstOrDefault(s => s.Value == number);
+                        if (match != null)
+                        {
+                            Console.WriteLine($"{match.Expression} = {match.Value}");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"no solution");
+                        }
+                    }
 
                 }
             }
         }
-        static int[] PreComputeAll()
+
+        public record CalculationResult(int Value, string Expression);
+
+        static List<CalculationResult> PreComputeAll()
         {
-            // calculate all solutions between the number -60 and 256
-            // sound solution -> save startNum (8) and solution "4 + 4 - 4 + 4 = 8"
-            // return array 
+            string[] operations = { "+", "-", "*", "/" };
+            var results = new List<CalculationResult>();
+            DataTable dataTable = new DataTable();
+
+            var combinations = from op1 in operations
+                               from op2 in operations
+                               from op3 in operations
+                               select new { op1, op2, op3 };
+
+            foreach (var c in combinations)
+            {
+                string expression = $"4 {c.op1} 4 {c.op2} 4 {c.op3} 4";
+                var valRaw = dataTable.Compute(expression, "");
+                int val = Convert.ToInt32(valRaw);
+                if (val >= -60 && val <= 256 && !results.Any(r => r.Value == val))
+                {
+                    results.Add(new CalculationResult(val, expression));
+                }
+            }
+            return results; //.OrderBy(r => r.Value).ToList();
         }
     }
 }
